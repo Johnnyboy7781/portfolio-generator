@@ -1,14 +1,39 @@
 const inquirer = require('inquirer');
-// const generatePage = require('./src/page-template');
-// const fs = require('fs');
+const generatePage = require('./src/page-template');
+const fs = require('fs');
 
-// const pageHTML = generatePage(name, github);
-
-// fs.writeFile('index.html', generatePage(name, github), err => {
-//     if (err) throw err;
-
-//     console.log(`Portfolio complete! Check out index.html to see the output!`);
-// })
+const mockData = {
+    name: 'Jon',
+    github: 'JonBoy',
+    confirmAbout: true,
+    about: 'I am a little boy ',
+    projects: [
+        {
+        name: 'Run Buddy',
+        description: 'A website where you can find other runners to excercise with',
+        languages: ["Javascript", "HTML", "CSS"],
+        link: 'johnboy.com/run-buddy',
+        feature: true,
+        confirmAddProject: true
+        },
+        {
+        name: 'Taskmaster-Pro',
+        description: 'A website where you can keep track of you tasks on a kanban-style board',
+        languages: ["Javascript", "HTML", "CSS"],
+        link: 'johnboy.com/taskmaster-pro',
+        feature: true,
+        confirmAddProject: true
+        },
+        {
+        name: 'MyCows',
+        description: 'A roadtrip game app',
+        languages: ["Javascript", "HTML", "CSS"],
+        link: 'johnboy.com/mycows',
+        feature: false,
+        confirmAddProject: false
+        }
+    ]
+}
 
 const promptUser = () => {
     return inquirer.prompt([
@@ -60,8 +85,8 @@ const promptUser = () => {
 }
 
 const promptProject = portfolioData => {
-    if (!portfolioData.porjects) {
-        portfolioData.porjects = [];
+    if (!portfolioData.projects) {
+        portfolioData.projects = [];
     }
 
     console.log(`
@@ -121,7 +146,7 @@ const promptProject = portfolioData => {
       }
     ])
     .then(projectData => {
-        portfolioData.porjects.push(projectData);
+        portfolioData.projects.push(projectData);
         if (projectData.confirmAddProject) {
             return promptProject(portfolioData);
         } else {
@@ -130,9 +155,17 @@ const promptProject = portfolioData => {
     });
   };
 
-promptUser()
-    .then(promptProject)
-    .then(portfolioData => {
-        console.log(portfolioData);
-    });
+  const pageHTML = generatePage(mockData);
+
+// promptUser()
+//     .then(promptProject)
+//     .then(portfolioData => {
+//         const pageHTML = generatePage(portfolioData);
+
+        fs.writeFile('index.html', generatePage(mockData), err => {
+            if (err) throw err;
+
+            console.log(`Portfolio complete! Check out index.html to see the output!`);
+        });
+//     });
     
